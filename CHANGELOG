@@ -1,3 +1,9 @@
+v0.1.0 added #filing_history_xml request
+
+v0.0.10. added gemspec so can be used from /vendor directory in Rails apps
+
+v0.0.9.1. allow password and sender_id to be passed in with request (allows more granular use of keys)
+
 v0.0.9. fixes bug preventing multiple sic codes being returned in query response
 
 v0.0.8. use Nokogiri instead of Hpricot

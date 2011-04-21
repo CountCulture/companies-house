@@ -14,7 +14,7 @@ require File.dirname(__FILE__) + '/companies_house/exception'
 $KCODE = 'UTF8' unless RUBY_VERSION >= "1.9"
 
 module CompaniesHouse
-  VERSION = "0.0.9.1" unless defined? CompaniesHouse::VERSION
+  # VERSION = "0.0.9.1" unless defined? CompaniesHouse::VERSION
 
   class << self
 
@@ -30,6 +30,11 @@ module CompaniesHouse
 
     def company_details number, options={}
       xml = CompaniesHouse::Request.company_details_xml options.merge(:company_number => number)
+      get_response(xml)
+    end
+
+    def filing_history number, options={}
+      xml = CompaniesHouse::Request.filing_history_xml options.merge(:company_number => number)
       get_response(xml)
     end
 

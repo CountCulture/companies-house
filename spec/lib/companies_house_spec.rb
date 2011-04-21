@@ -169,5 +169,13 @@ describe CompaniesHouse do
         CompaniesHouse.company_details(@company_number).should == @response_xml
       end
     end
+
+    describe "when asked for filing history request" do
+      it 'should perform request correctly' do
+        CompaniesHouse::Request.should_receive(:filing_history_xml).with(:company_number=> @company_number).and_return @request_xml
+        CompaniesHouse.should_receive(:get_response).with(@request_xml).and_return @response_xml
+        CompaniesHouse.filing_history(@company_number).should == @response_xml
+      end
+    end
   end
 end

@@ -1,0 +1,22 @@
+PATH
+  remote: .
+  specs:
+    companies-house (0.0.10)
+      haml
+      morph
+      nokogiri
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    activesupport (3.0.7)
+    haml (3.0.25)
+    morph (0.3.2)
+      activesupport (>= 2.0.2)
+    nokogiri (1.4.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  companies-house!

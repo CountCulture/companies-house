@@ -13,6 +13,10 @@ module CompaniesHouse
       def company_details_xml options
         create default(options).merge(:request_type=>'CompanyDetails', :template=>'company_details')
       end
+      
+      def filing_history_xml options
+        create default(options).merge(:request_type=>'FilingHistory', :template=>'filing_history')
+      end
 
       private
 

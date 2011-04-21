@@ -22,6 +22,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'morph'
   s.add_dependency 'nokogiri'
   s.add_dependency 'haml'
-  s.add_dependency 'yaml'
+  # s.add_dependency 'yaml'
   
 end
