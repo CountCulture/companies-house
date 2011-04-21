@@ -15,9 +15,9 @@ begin
     m.author = ["Rob McKinnon"]
     m.email = ["rob ~@nospam@~ rubyforge.org"]
     m.description = File.readlines("README").first
-    m.rubyforge_name = "companies-house"
-    m.rdoc_options << '--inline-source'
-    m.rdoc_pattern = ["README", "CHANGELOG", "LICENSE"]
+    # m.rubyforge_name = "companies-house"
+    # m.rdoc_options << '--inline-source'
+    # m.rdoc_pattern = ["README", "CHANGELOG", "LICENSE"]
     m.dependencies = ["nokogiri", "haml >=2.0.9", "morph >=0.3.2"]
     # m.executable_pattern = 'bin/companies_house'
   end
