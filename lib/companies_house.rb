@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 require 'net/http'
 require 'uri'
 require 'open-uri'
@@ -8,6 +9,7 @@ require 'nokogiri'
 require 'haml'
 require 'yaml'
 
+require File.dirname(__FILE__) + '/companies_house/version'
 require File.dirname(__FILE__) + '/companies_house/request'
 require File.dirname(__FILE__) + '/companies_house/exception'
 
@@ -17,6 +19,11 @@ module CompaniesHouse
   # VERSION = "0.0.9.1" unless defined? CompaniesHouse::VERSION
 
   class << self
+    
+    def appointments number, options={}
+      xml = CompaniesHouse::Request.appointments_xml options.merge(:company_number => number)
+      get_response(xml)
+    end
 
     def name_search name, options={}
       xml = CompaniesHouse::Request.name_search_xml options.merge(:company_name => name)

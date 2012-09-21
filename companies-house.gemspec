@@ -1,6 +1,10 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
-require "companies_house/version"
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+require File.join(lib, 'companies_house', 'version')
+
+# require 'companies-house/version'
 
 Gem::Specification.new do |s|
   s.name        = "companies-house"
@@ -19,9 +23,9 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
   
+  s.add_development_dependency 'rspec'
   s.add_dependency 'morph'
   s.add_dependency 'nokogiri'
   s.add_dependency 'haml'
-  # s.add_dependency 'yaml'
   
 end

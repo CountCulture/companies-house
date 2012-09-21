@@ -38,6 +38,12 @@ describe CompaniesHouse::Request do
       <CompanyNumber>#{@company_number}</CompanyNumber>
       <CapitalDocInd>1</CapitalDocInd>
     </FilingHistoryRequest>|
+
+    @appointments_type = 'Appointments'
+    @appointments_xml = expected_xml @appointments_type, %Q|<AppointmentsRequest xmlns="http://xmlgw.companieshouse.gov.uk/v1-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlgw.companieshouse.gov.uk/v1-0/schema/Appointments.xsd">
+      <CompanyNumber>#{@company_number}</CompanyNumber>
+      <IncludeResignedInd>1</IncludeResignedInd>
+    </AppointmentsRequest>|
   end
 
   describe "when asked for name search request xml" do
@@ -108,7 +114,7 @@ describe CompaniesHouse::Request do
     end
   end
 
-  describe "when asked for filing hisotry request xml" do
+  describe "when asked for filing history request xml" do
     it 'should create xml correctly' do
       CompaniesHouse.email = ''
       CompaniesHouse.email.should == ''
@@ -120,6 +126,22 @@ describe CompaniesHouse::Request do
       it "should use given sender_id and password when creating transaction_id and digest" do
         CompaniesHouse.should_receive(:create_transaction_id_and_digest).with(hash_including(:sender_id => 'foo123', :password => 'bar456'))
         CompaniesHouse::Request.filing_history_xml(:company_number => @company_number, :sender_id => 'foo123', :password => 'bar456')
+      end
+    end
+  end
+
+  describe "when asked for appointmentsrequest xml" do
+    it 'should create xml correctly' do
+      CompaniesHouse.email = ''
+      CompaniesHouse.email.should == ''
+      request_xml = CompaniesHouse::Request.appointments_xml :company_number => @company_number
+      request_xml.strip.should == @appointments_xml.strip
+    end
+    
+    describe "and sender_id and password given in options" do
+      it "should use given sender_id and password when creating transaction_id and digest" do
+        CompaniesHouse.should_receive(:create_transaction_id_and_digest).with(hash_including(:sender_id => 'foo123', :password => 'bar456'))
+        CompaniesHouse::Request.appointments_xml(:company_number => @company_number, :sender_id => 'foo123', :password => 'bar456')
       end
     end
   end
