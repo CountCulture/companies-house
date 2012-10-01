@@ -149,7 +149,7 @@ describe CompaniesHouse do
     
     describe "when asked for name search request" do
       it 'should perform request correctly' do
-        CompaniesHouse::Request.should_receive(:name_search_xml).with(:company_name=> @company_name).and_return @request_xml
+        CompaniesHouse::Request.should_receive(:request_xml).with(:name_search, :company_name=> @company_name).and_return @request_xml
         CompaniesHouse.should_receive(:get_response).with(@request_xml).and_return @response_xml
         CompaniesHouse.name_search(@company_name).should == @response_xml
       end
@@ -157,7 +157,7 @@ describe CompaniesHouse do
 
     describe "when asked for number search request" do
       it 'should perform request correctly' do
-        CompaniesHouse::Request.should_receive(:number_search_xml).with(:company_number=> @company_number).and_return @request_xml
+        CompaniesHouse::Request.should_receive(:request_xml).with(:number_search, :company_number=> @company_number).and_return @request_xml
         CompaniesHouse.should_receive(:get_response).with(@request_xml).and_return @response_xml
         CompaniesHouse.number_search(@company_number).should == @response_xml
       end
@@ -165,7 +165,7 @@ describe CompaniesHouse do
 
     describe "when asked for company details request" do
       it 'should perform request correctly' do
-        CompaniesHouse::Request.should_receive(:company_details_xml).with(:company_number=> @company_number).and_return @request_xml
+        CompaniesHouse::Request.should_receive(:request_xml).with(:company_details, :company_number=> @company_number).and_return @request_xml
         CompaniesHouse.should_receive(:get_response).with(@request_xml).and_return @response_xml
         CompaniesHouse.company_details(@company_number).should == @response_xml
       end
@@ -173,7 +173,7 @@ describe CompaniesHouse do
 
     describe "when asked for filing history request" do
       it 'should perform request correctly' do
-        CompaniesHouse::Request.should_receive(:filing_history_xml).with(:company_number=> @company_number).and_return @request_xml
+        CompaniesHouse::Request.should_receive(:request_xml).with(:filing_history, :company_number=> @company_number).and_return @request_xml
         CompaniesHouse.should_receive(:get_response).with(@request_xml).and_return @response_xml
         CompaniesHouse.filing_history(@company_number).should == @response_xml
       end
@@ -181,16 +181,43 @@ describe CompaniesHouse do
 
     describe "when asked for appointments request" do
       it 'should perform request correctly' do
-        CompaniesHouse::Request.should_receive(:company_appointments_xml).with(:company_number=> @company_number, :company_name => @company_name).and_return @request_xml
+        CompaniesHouse::Request.should_receive(:request_xml).with(:company_appointments, :company_number=> @company_number, :company_name => @company_name).and_return @request_xml
         CompaniesHouse.should_receive(:get_response).with(@request_xml).and_return @response_xml
         CompaniesHouse.company_appointments(@company_number, @company_name).should == @response_xml
       end
       
       it 'convert & in company name to &amp;' do
-        CompaniesHouse::Request.should_receive(:company_appointments_xml).with(:company_number=> @company_number, :company_name => 'Foo &amp; Bar').and_return @request_xml
+        CompaniesHouse::Request.should_receive(:request_xml).with(:company_appointments, :company_number=> @company_number, :company_name => 'Foo &amp; Bar').and_return @request_xml
         CompaniesHouse.should_receive(:get_response).with(@request_xml).and_return @response_xml
         CompaniesHouse.company_appointments(@company_number, 'Foo & Bar').should == @response_xml
       end
+    end
+    
+    describe 'request' do
+      it 'should get request xml with request type' do
+        CompaniesHouse::Request.should_receive(:request_xml).with(:foo_request, :foo => 'bar').and_return @request_xml
+        CompaniesHouse.stub(:get_response)
+        CompaniesHouse.request(:foo_request, :foo => 'bar')
+      end
+      
+      it 'should get response using request_xml' do
+        CompaniesHouse::Request.stub(:request_xml).and_return @request_xml
+        CompaniesHouse.should_receive(:get_response).with(@request_xml)
+        CompaniesHouse.request(:foo_request, :foo => 'bar')
+      end
+      
+      it 'should return response ' do
+        CompaniesHouse::Request.stub(:request_xml).and_return @request_xml
+        CompaniesHouse.should_receive(:get_response).with(@request_xml).and_return @response_xml
+        CompaniesHouse.request(:foo_request, :foo => 'bar').should == @response_xml
+      end
+      
+      it 'should get response verbosely if set' do
+        CompaniesHouse::Request.stub(:request_xml).and_return @request_xml
+        CompaniesHouse.should_receive(:get_response).with(@request_xml, :verbose => true)
+        CompaniesHouse.request(:foo_request, :verbose => true)
+      end
+      
     end
   end
 end

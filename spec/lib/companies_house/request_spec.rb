@@ -40,11 +40,25 @@ describe CompaniesHouse::Request do
     </FilingHistoryRequest>|
 
     @appointments_type = 'CompanyAppointments'
-    @appointments_xml = expected_xml @appointments_type, "<CompanyApptRequest xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns='http://xmlgw.companieshouse.gov.uk/v1-0/schema' xsi:schemaLocation='http://xmlgw.companieshouse.gov.uk/v1-0/schema/CompanyAppointments-v2-2.xsd'>
+    @appointments_xml = expected_xml @appointments_type, %Q|<CompanyApptRequest xmlns="http://xmlgw.companieshouse.gov.uk/v1-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlgw.companieshouse.gov.uk/v1-0/schema/CompanyAppointments.xsd">
       <CompanyNumber>#{@company_number}</CompanyNumber>
       <CompanyName>#{@company_name}</CompanyName>
       <IncludeResignedInd>1</IncludeResignedInd>
-    </CompanyApptRequest>"
+    </CompanyApptRequest>|
+  end
+  
+  describe 'request_xml' do
+
+    it 'should use template based on request_type' do
+      request_xml = CompaniesHouse::Request.request_xml :number_search, :company_number => @company_number
+      request_xml.strip.should == @number_search_xml.strip
+    end
+    
+    it "should use given sender_id and password when creating transaction_id and digest" do
+      CompaniesHouse.should_receive(:create_transaction_id_and_digest).with(hash_including(:sender_id => 'foo123', :password => 'bar456'))
+      CompaniesHouse::Request.request_xml(:number_search, :company_number => @company_number, :sender_id => 'foo123', :password => 'bar456')
+    end
+
   end
 
   describe "when asked for name search request xml" do

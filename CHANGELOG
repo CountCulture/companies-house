@@ -1,3 +1,7 @@
+v0.3.0 refactored request calls, and add verbose mode to capture request and response
+
+v0.2.0 added #company_appointments request
+
 v0.1.0 added #filing_history_xml request
 
 v0.0.10. added gemspec so can be used from /vendor directory in Rails apps

@@ -20,28 +20,29 @@ module CompaniesHouse
   class << self
     
     def company_appointments number, name, options={}
-      xml = CompaniesHouse::Request.company_appointments_xml options.merge(:company_number => number, :company_name => name.gsub('&','&amp;'))
-      get_response(xml)
+      request :company_appointments, options.merge(:company_number => number, :company_name => name.gsub('&','&amp;'))
     end
 
     def name_search name, options={}
-      xml = CompaniesHouse::Request.name_search_xml options.merge(:company_name => name)
-      get_response(xml)
+      request :name_search, options.merge(:company_name => name)
     end
 
     def number_search number, options={}
-      xml = CompaniesHouse::Request.number_search_xml options.merge(:company_number => number)
-      get_response(xml)
+      request :number_search, options.merge(:company_number => number)
     end
 
     def company_details number, options={}
-      xml = CompaniesHouse::Request.company_details_xml options.merge(:company_number => number)
-      get_response(xml)
+      request :company_details, options.merge(:company_number => number)
     end
 
     def filing_history number, options={}
-      xml = CompaniesHouse::Request.filing_history_xml options.merge(:company_number => number)
-      get_response(xml)
+      request :filing_history, options.merge(:company_number => number)
+    end
+    
+    def request(request_type, params)
+      verbose = params.delete(:verbose)
+      xml = CompaniesHouse::Request.request_xml request_type, params
+      verbose ? get_response(xml, :verbose => verbose) : get_response(xml)
     end
 
     def sender_id= id

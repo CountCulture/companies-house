@@ -21,6 +21,10 @@ module CompaniesHouse
       def filing_history_xml options
         create default(options).merge(:request_type=>'FilingHistory', :template=>'filing_history')
       end
+      
+      def request_xml(request_type, options={})
+        create default(options).merge(:request_type => request_type.to_s.camelcase, :template => request_type.to_s)
+      end
 
       private
 
