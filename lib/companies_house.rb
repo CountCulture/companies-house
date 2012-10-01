@@ -147,18 +147,18 @@ module CompaniesHouse
         object
       end
 
-      def get_response(data, root_element='NameSearch', options={})
+      def get_response(data, options={})
         begin
           http = Net::HTTP.new("xmlgw.companieshouse.gov.uk", 80)
           puts "CompaniesHouse request:\n#{data.inspect}" if options[:verbose]
           res, body = http.post("/v1-0/xmlgw/Gateway", data, {'Content-type'=>'text/xml;charset=utf-8'})
-          puts "CompaniesHouse response:\n#{body.inspect}" if options[:verbose]
+          puts "CompaniesHouse response:\n#{res.inspect}" if options[:verbose]
           case res
-            when Net::HTTPSuccess, Net::HTTPRedirection
-              xml = res.body
-              objectify xml
-            else
-              raise CompaniesHouse::Exception.new(res.inspect.to_s)
+          when Net::HTTPSuccess, Net::HTTPRedirection
+            xml = res.body
+            objectify xml
+          else
+            raise CompaniesHouse::Exception.new(res.inspect.to_s)
           end
         rescue URI::InvalidURIError => e
           raise CompaniesHouse::Exception.new(e.class.name + ' ' + e.to_s)

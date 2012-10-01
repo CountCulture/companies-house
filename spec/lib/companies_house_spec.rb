@@ -191,6 +191,7 @@ describe CompaniesHouse do
         CompaniesHouse.should_receive(:get_response).with(@request_xml).and_return @response_xml
         CompaniesHouse.company_appointments(@company_number, 'Foo & Bar').should == @response_xml
       end
+      
     end
     
     describe 'request' do

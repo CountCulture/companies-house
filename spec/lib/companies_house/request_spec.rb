@@ -63,52 +63,52 @@ describe CompaniesHouse::Request do
 
   describe "when asked for name search request xml" do
     it 'should create xml correctly' do
-      request_xml = CompaniesHouse::Request.name_search_xml :company_name => @company_name
+      request_xml = CompaniesHouse::Request.request_xml :name_search_xml, :company_name => @company_name
       request_xml.strip.should == @name_search_xml.strip
     end
 
     describe "and same_as flag is set to true" do
       it 'should create xml correctly' do
-        request_xml = CompaniesHouse::Request.name_search_xml :company_name => @company_name, :same_as => 'true'
+        request_xml = CompaniesHouse::Request.request_xml :name_search_xml, :company_name => @company_name, :same_as => 'true'
         request_xml.strip.should == @name_search_xml.gsub('      <DataSet>LIVE</DataSet>',"      <DataSet>LIVE</DataSet>\n      <SameAs>true</SameAs>").strip
       end
     end
     describe "and same_as flag is set to false" do
       it 'should create xml correctly' do
-        request_xml = CompaniesHouse::Request.name_search_xml :company_name => @company_name, :same_as => 'false'
+        request_xml = CompaniesHouse::Request.request_xml :name_search_xml, :company_name => @company_name, :same_as => 'false'
         request_xml.strip.should == @name_search_xml.strip
       end
     end
     describe "and continuation_key is set" do
       it 'should create xml correctly' do
-        request_xml = CompaniesHouse::Request.name_search_xml :company_name => @company_name, :continuation_key => '1234'
+        request_xml = CompaniesHouse::Request.request_xml :name_search_xml, :company_name => @company_name, :continuation_key => '1234'
         request_xml.strip.should == @name_search_xml.gsub('      <SearchRows>20</SearchRows>',"      <SearchRows>20</SearchRows>\n      <ContinuationKey>1234</ContinuationKey>").strip
       end
     end
     describe "and regression_key is set" do
       it 'should create xml correctly' do
-        request_xml = CompaniesHouse::Request.name_search_xml :company_name => @company_name, :regression_key => '4321'
+        request_xml = CompaniesHouse::Request.request_xml :name_search_xml, :company_name => @company_name, :regression_key => '4321'
         request_xml.strip.should == @name_search_xml.gsub('      <SearchRows>20</SearchRows>',"      <SearchRows>20</SearchRows>\n      <RegressionKey>4321</RegressionKey>").strip
       end
     end
     describe "and sender_id and password given in options" do
       it "should use given sender_id and password when creating transaction_id and digest" do
         CompaniesHouse.should_receive(:create_transaction_id_and_digest).with(hash_including(:sender_id => 'foo123', :password => 'bar456'))
-        CompaniesHouse::Request.name_search_xml(:company_name => @company_name, :sender_id => 'foo123', :password => 'bar456')
+        CompaniesHouse::Request.request_xml :name_search_xml(:company_name => @company_name, :sender_id => 'foo123', :password => 'bar456')
       end
     end
   end
 
   describe "when asked for number search request xml" do
     it 'should create xml correctly' do
-      request_xml = CompaniesHouse::Request.number_search_xml :company_number => @company_number
+      request_xml = CompaniesHouse::Request.request_xml :number_search_xml :company_number => @company_number
       request_xml.strip.should == @number_search_xml.strip
     end
     
     describe "and sender_id and password given in options" do
       it "should use given sender_id and password when creating transaction_id and digest" do
         CompaniesHouse.should_receive(:create_transaction_id_and_digest).with(hash_including(:sender_id => 'foo123', :password => 'bar456'))
-        CompaniesHouse::Request.number_search_xml(:company_number => @company_number, :sender_id => 'foo123', :password => 'bar456')
+        CompaniesHouse::Request.request_xml :number_search_xml(:company_number => @company_number, :sender_id => 'foo123', :password => 'bar456')
       end
     end
   end
@@ -117,14 +117,14 @@ describe CompaniesHouse::Request do
     it 'should create xml correctly' do
       CompaniesHouse.email = ''
       CompaniesHouse.email.should == ''
-      request_xml = CompaniesHouse::Request.company_details_xml :company_number => @company_number
+      request_xml = CompaniesHouse::Request.request_xml :company_details_xml :company_number => @company_number
       request_xml.strip.should == @company_details_xml.strip
     end
     
     describe "and sender_id and password given in options" do
       it "should use given sender_id and password when creating transaction_id and digest" do
         CompaniesHouse.should_receive(:create_transaction_id_and_digest).with(hash_including(:sender_id => 'foo123', :password => 'bar456'))
-        CompaniesHouse::Request.company_details_xml(:company_number => @company_number, :sender_id => 'foo123', :password => 'bar456')
+        CompaniesHouse::Request.request_xml :company_details_xml(:company_number => @company_number, :sender_id => 'foo123', :password => 'bar456')
       end
     end
   end
@@ -133,30 +133,37 @@ describe CompaniesHouse::Request do
     it 'should create xml correctly' do
       CompaniesHouse.email = ''
       CompaniesHouse.email.should == ''
-      request_xml = CompaniesHouse::Request.filing_history_xml :company_number => @company_number
+      request_xml = CompaniesHouse::Request.request_xml :filing_history_xml :company_number => @company_number
       request_xml.strip.should == @filing_history_xml.strip
     end
     
     describe "and sender_id and password given in options" do
       it "should use given sender_id and password when creating transaction_id and digest" do
         CompaniesHouse.should_receive(:create_transaction_id_and_digest).with(hash_including(:sender_id => 'foo123', :password => 'bar456'))
-        CompaniesHouse::Request.filing_history_xml(:company_number => @company_number, :sender_id => 'foo123', :password => 'bar456')
+        CompaniesHouse::Request.request_xml :filing_history_xml(:company_number => @company_number, :sender_id => 'foo123', :password => 'bar456')
       end
     end
   end
 
-  describe "when asked for appointmentsrequest xml" do
+  describe "when asked for company_appointments request_xml" do
     it 'should create xml correctly' do
       CompaniesHouse.email = ''
       CompaniesHouse.email.should == ''
-      request_xml = CompaniesHouse::Request.company_appointments_xml :company_number => @company_number, :company_name => @company_name
+      request_xml = CompaniesHouse::Request.request_xml :request_xml :company_appointments_xml :company_number => @company_number, :company_name => @company_name
       request_xml.strip.should == @appointments_xml.strip
     end
     
     describe "and sender_id and password given in options" do
       it "should use given sender_id and password when creating transaction_id and digest" do
         CompaniesHouse.should_receive(:create_transaction_id_and_digest).with(hash_including(:sender_id => 'foo123', :password => 'bar456'))
-        CompaniesHouse::Request.company_appointments_xml(:company_number => @company_number, :company_name => @company_name, :sender_id => 'foo123', :password => 'bar456')
+        CompaniesHouse::Request.request_xml :request_xml :company_appointments_xml(:company_number => @company_number, :company_name => @company_name, :sender_id => 'foo123', :password => 'bar456')
+      end
+    end
+    
+    describe "and verbose output requested" do
+      it "should use given sender_id and password when creating transaction_id and digest" do
+        CompaniesHouse.should_receive(:create_transaction_id_and_digest).with(hash_including(:sender_id => 'foo123', :password => 'bar456'))
+        CompaniesHouse::Request.request_xml :request_xml :company_appointments_xml(:company_number => @company_number, :company_name => @company_name, :sender_id => 'foo123', :password => 'bar456')
       end
     end
   end

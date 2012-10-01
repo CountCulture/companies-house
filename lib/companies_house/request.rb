@@ -2,25 +2,6 @@ module CompaniesHouse
   module Request
 
     class << self
-      def company_appointments_xml options
-        create default(options).merge(:request_type=>'CompanyAppointments', :template=>'company_appointments')
-      end
-
-      def name_search_xml options
-        create default(options).merge(:request_type=>'NameSearch', :template=>'name_search')
-      end
-
-      def number_search_xml options
-        create default(options).merge(:request_type=>'NumberSearch', :template=>'number_search')
-      end
-
-      def company_details_xml options
-        create default(options).merge(:request_type=>'CompanyDetails', :template=>'company_details')
-      end
-      
-      def filing_history_xml options
-        create default(options).merge(:request_type=>'FilingHistory', :template=>'filing_history')
-      end
       
       def request_xml(request_type, options={})
         create default(options).merge(:request_type => request_type.to_s.camelcase, :template => request_type.to_s)
