@@ -181,9 +181,15 @@ describe CompaniesHouse do
 
     describe "when asked for appointments request" do
       it 'should perform request correctly' do
-        CompaniesHouse::Request.should_receive(:appointments_xml).with(:company_number=> @company_number).and_return @request_xml
+        CompaniesHouse::Request.should_receive(:company_appointments_xml).with(:company_number=> @company_number, :company_name => @company_name).and_return @request_xml
         CompaniesHouse.should_receive(:get_response).with(@request_xml).and_return @response_xml
-        CompaniesHouse.appointments(@company_number).should == @response_xml
+        CompaniesHouse.company_appointments(@company_number, @company_name).should == @response_xml
+      end
+      
+      it 'convert & in company name to &amp;' do
+        CompaniesHouse::Request.should_receive(:company_appointments_xml).with(:company_number=> @company_number, :company_name => 'Foo &amp; Bar').and_return @request_xml
+        CompaniesHouse.should_receive(:get_response).with(@request_xml).and_return @response_xml
+        CompaniesHouse.company_appointments(@company_number, 'Foo & Bar').should == @response_xml
       end
     end
   end

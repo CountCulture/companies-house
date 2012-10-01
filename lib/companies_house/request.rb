@@ -2,8 +2,8 @@ module CompaniesHouse
   module Request
 
     class << self
-      def appointments_xml options
-        create default(options).merge(:request_type=>'Appointments', :template=>'appointments')
+      def company_appointments_xml options
+        create default(options).merge(:request_type=>'CompanyAppointments', :template=>'company_appointments')
       end
 
       def name_search_xml options

@@ -16,12 +16,11 @@ require File.dirname(__FILE__) + '/companies_house/exception'
 $KCODE = 'UTF8' unless RUBY_VERSION >= "1.9"
 
 module CompaniesHouse
-  # VERSION = "0.0.9.1" unless defined? CompaniesHouse::VERSION
 
   class << self
     
-    def appointments number, options={}
-      xml = CompaniesHouse::Request.appointments_xml options.merge(:company_number => number)
+    def company_appointments number, name, options={}
+      xml = CompaniesHouse::Request.company_appointments_xml options.merge(:company_number => number, :company_name => name.gsub('&','&amp;'))
       get_response(xml)
     end
 
@@ -147,10 +146,12 @@ module CompaniesHouse
         object
       end
 
-      def get_response(data, root_element='NameSearch')
+      def get_response(data, root_element='NameSearch', options={})
         begin
           http = Net::HTTP.new("xmlgw.companieshouse.gov.uk", 80)
+          puts "CompaniesHouse request:\n#{data.inspect}" if options[:verbose]
           res, body = http.post("/v1-0/xmlgw/Gateway", data, {'Content-type'=>'text/xml;charset=utf-8'})
+          puts "CompaniesHouse response:\n#{body.inspect}" if options[:verbose]
           case res
             when Net::HTTPSuccess, Net::HTTPRedirection
               xml = res.body

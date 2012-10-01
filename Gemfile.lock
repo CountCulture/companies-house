@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    companies-house (0.1.0)
+    companies-house (0.2.0)
       haml
       morph
       nokogiri

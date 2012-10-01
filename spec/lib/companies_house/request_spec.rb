@@ -39,11 +39,12 @@ describe CompaniesHouse::Request do
       <CapitalDocInd>1</CapitalDocInd>
     </FilingHistoryRequest>|
 
-    @appointments_type = 'Appointments'
-    @appointments_xml = expected_xml @appointments_type, %Q|<AppointmentsRequest xmlns="http://xmlgw.companieshouse.gov.uk/v1-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlgw.companieshouse.gov.uk/v1-0/schema/Appointments.xsd">
+    @appointments_type = 'CompanyAppointments'
+    @appointments_xml = expected_xml @appointments_type, "<CompanyApptRequest xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns='http://xmlgw.companieshouse.gov.uk/v1-0/schema' xsi:schemaLocation='http://xmlgw.companieshouse.gov.uk/v1-0/schema/CompanyAppointments-v2-2.xsd'>
       <CompanyNumber>#{@company_number}</CompanyNumber>
+      <CompanyName>#{@company_name}</CompanyName>
       <IncludeResignedInd>1</IncludeResignedInd>
-    </AppointmentsRequest>|
+    </CompanyApptRequest>"
   end
 
   describe "when asked for name search request xml" do
@@ -61,7 +62,7 @@ describe CompaniesHouse::Request do
     describe "and same_as flag is set to false" do
       it 'should create xml correctly' do
         request_xml = CompaniesHouse::Request.name_search_xml :company_name => @company_name, :same_as => 'false'
-      request_xml.strip.should == @name_search_xml.strip
+        request_xml.strip.should == @name_search_xml.strip
       end
     end
     describe "and continuation_key is set" do
@@ -134,14 +135,14 @@ describe CompaniesHouse::Request do
     it 'should create xml correctly' do
       CompaniesHouse.email = ''
       CompaniesHouse.email.should == ''
-      request_xml = CompaniesHouse::Request.appointments_xml :company_number => @company_number
+      request_xml = CompaniesHouse::Request.company_appointments_xml :company_number => @company_number, :company_name => @company_name
       request_xml.strip.should == @appointments_xml.strip
     end
     
     describe "and sender_id and password given in options" do
       it "should use given sender_id and password when creating transaction_id and digest" do
         CompaniesHouse.should_receive(:create_transaction_id_and_digest).with(hash_including(:sender_id => 'foo123', :password => 'bar456'))
-        CompaniesHouse::Request.appointments_xml(:company_number => @company_number, :sender_id => 'foo123', :password => 'bar456')
+        CompaniesHouse::Request.company_appointments_xml(:company_number => @company_number, :company_name => @company_name, :sender_id => 'foo123', :password => 'bar456')
       end
     end
   end
